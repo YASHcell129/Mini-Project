@@ -28,8 +28,10 @@ const LoginForm = ({ role, goBack }) => {
 
         if (role === "Student") {
           window.location.href = "/student";
-        } else {
-          alert(`${role} dashboard coming soon`);
+        } else if (role === "Faculty") {
+          window.location.href = "/faculty";
+        } else if (role === "Admin") {
+          window.location.href = "/admin";
         }
       }
     } catch (err) {
