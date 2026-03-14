@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 
 const LoginForm = ({ role, goBack }) => {
+  const [showPassword, setShowPassword] = useState(false);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -16,11 +18,12 @@ const LoginForm = ({ role, goBack }) => {
       });
 
       if (res.data.success) {
-        // store returned user info so dashboards can read the display name
         try {
           if (res.data.user) {
             localStorage.setItem("user", JSON.stringify(res.data.user));
-            if (res.data.user.name) localStorage.setItem("userName", res.data.user.name);
+            if (res.data.user.name) {
+              localStorage.setItem("userName", res.data.user.name);
+            }
           }
         } catch (err) {
           // ignore storage errors
@@ -38,8 +41,6 @@ const LoginForm = ({ role, goBack }) => {
       alert("Invalid username or password");
     }
   };
-
-  const [showPassword, setShowPassword] = useState(false);
 
   return (
     <div className="card">
@@ -101,7 +102,7 @@ const LoginForm = ({ role, goBack }) => {
         </button>
       </form>
 
-      <p className="back" onClick={goBack}>← Back</p>
+      <p className="back" onClick={goBack}>&larr; Back</p>
     </div>
   );
 };
