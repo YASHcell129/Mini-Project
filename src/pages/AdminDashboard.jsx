@@ -3,15 +3,70 @@ import axios from "axios";
 import LogoutConfirmModal from "../components/LogoutConfirmModal";
 import "../style.css";
 
+const ModuleIcon = ({ kind }) => {
+  const icons = {
+    users: (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M16 19a4 4 0 0 0-8 0" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+        <circle cx="12" cy="9" r="3" fill="none" stroke="currentColor" strokeWidth="1.8" />
+        <path d="M18.5 17.5a3 3 0 0 0-2.2-2.9M17 7.5a2.5 2.5 0 1 1 0 5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      </svg>
+    ),
+    faculty: (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="m4 9 8-4 8 4-8 4-8-4Z" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
+        <path d="M8 11.5V15c0 1.7 1.8 3 4 3s4-1.3 4-3v-3.5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+    student: (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="8.5" r="3" fill="none" stroke="currentColor" strokeWidth="1.8" />
+        <path d="M6.5 18a5.5 5.5 0 0 1 11 0" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      </svg>
+    ),
+    departments: (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M4 20h16M6 20V7l6-3 6 3v13M10 10h4M10 14h4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+    fees: (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="4" y="6" width="16" height="12" rx="2" fill="none" stroke="currentColor" strokeWidth="1.8" />
+        <circle cx="12" cy="12" r="2.5" fill="none" stroke="currentColor" strokeWidth="1.8" />
+        <path d="M8 4v2M16 4v2M8 18v2M16 18v2" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      </svg>
+    ),
+    announcements: (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M5 13V9a2 2 0 0 1 2-2h3l5-2v14l-5-2H7a2 2 0 0 1-2-2Z" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
+        <path d="M18 9.5a3 3 0 0 1 0 5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      </svg>
+    ),
+    reports: (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M6 19h12M8 16V9M12 16V5M16 16v-3" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+    settings: (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 8.5A3.5 3.5 0 1 0 12 15.5A3.5 3.5 0 1 0 12 8.5Z" fill="none" stroke="currentColor" strokeWidth="1.8" />
+        <path d="M19 12a7 7 0 0 0-.1-1l2-1.5-2-3.5-2.3.7a7.6 7.6 0 0 0-1.7-1L14.5 3h-5l-.4 2.7a7.6 7.6 0 0 0-1.7 1L5 6l-2 3.5L5 11a7 7 0 0 0 0 2l-2 1.5L5 18l2.4-.7a7.6 7.6 0 0 0 1.7 1l.4 2.7h5l.4-2.7a7.6 7.6 0 0 0 1.7-1l2.3.7 2-3.5-2-1.5c.1-.3.1-.7.1-1Z" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    )
+  };
+
+  return icons[kind] || null;
+};
+
 const modules = [
-  { title: "User Management", icon: "UM" },
-  { title: "Faculty Records", icon: "FR" },
-  { title: "Student Records", icon: "SR" },
-  { title: "Departments", icon: "DP" },
-  { title: "Fees Control", icon: "FC" },
-  { title: "Announcements", icon: "AN" },
-  { title: "Reports", icon: "RP" },
-  { title: "System Settings", icon: "SS" }
+  { title: "User Management", icon: "users" },
+  { title: "Faculty Records", icon: "faculty" },
+  { title: "Student Records", icon: "student" },
+  { title: "Departments", icon: "departments" },
+  { title: "Fees Control", icon: "fees" },
+  { title: "Announcements", icon: "announcements" },
+  { title: "Reports", icon: "reports" },
+  { title: "System Settings", icon: "settings" }
 ];
 
 const defaultOverview = [
@@ -311,7 +366,9 @@ const AdminDashboard = ({ name }) => {
               aria-label={module.title}
               onClick={() => handleModuleClick(module.title)}
             >
-              <span className="portal-sidebtn-icon">{module.icon}</span>
+              <span className="portal-sidebtn-icon">
+                <ModuleIcon kind={module.icon} />
+              </span>
               <span className="portal-sidebtn-label">{module.title}</span>
             </button>
           ))}
@@ -432,7 +489,7 @@ const AdminDashboard = ({ name }) => {
               onClick={() => handleModuleClick(module.title)}
             >
               <span className="portal-module-icon" aria-hidden="true">
-                {module.icon}
+                <ModuleIcon kind={module.icon} />
               </span>
               <span className="portal-module-title">{module.title}</span>
             </button>

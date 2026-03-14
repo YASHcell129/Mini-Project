@@ -2,19 +2,99 @@ import React, { useEffect, useRef, useState } from "react";
 import LogoutConfirmModal from "../components/LogoutConfirmModal";
 import "../style.css";
 
+const ModuleIcon = ({ kind }) => {
+  const icons = {
+    attendance: (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M7 4v3M17 4v3M5 9h14M6 6h12a1 1 0 0 1 1 1v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7a1 1 0 0 1 1-1Z" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="m9 14 2 2 4-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+    timetable: (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" strokeWidth="1.8" />
+        <path d="M12 8v5l3 2" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+    assessment: (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M8 5h8M8 9h8M8 13h5M6 3h12a2 2 0 0 1 2 2v14l-4-2-4 2-4-2-4 2V5a2 2 0 0 1 2-2Z" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+    admitCard: (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="5" y="4" width="14" height="16" rx="2" fill="none" stroke="currentColor" strokeWidth="1.8" />
+        <circle cx="9" cy="10" r="2" fill="none" stroke="currentColor" strokeWidth="1.8" />
+        <path d="M12.5 9h4M12.5 12h4M8 15h8" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      </svg>
+    ),
+    assignments: (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M9 4h6M8 7h8M7 4h10a2 2 0 0 1 2 2v13l-4-2-3 2-3-2-4 2V6a2 2 0 0 1 2-2Z" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="m9 11 1.5 1.5L15 8" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+    circular: (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M7 5h7l3 3v11a1 1 0 0 1-1 1H7a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
+        <path d="M14 5v4h4M8 13h8M8 16h6" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      </svg>
+    ),
+    courses: (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="m4 7 8-3 8 3-8 3-8-3Z" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
+        <path d="M7 9.5V15c0 1.1 2.2 2 5 2s5-.9 5-2V9.5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+    feedback: (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M6 6h12a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-7l-4 3v-3H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Z" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
+        <path d="M8.5 10.5h7M8.5 13.5h5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      </svg>
+    ),
+    fees: (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="4" y="6" width="16" height="12" rx="2" fill="none" stroke="currentColor" strokeWidth="1.8" />
+        <circle cx="12" cy="12" r="2.5" fill="none" stroke="currentColor" strokeWidth="1.8" />
+        <path d="M8 4v2M16 4v2M8 18v2M16 18v2" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      </svg>
+    ),
+    reportCard: (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M7 4h10a2 2 0 0 1 2 2v14l-3-2-3 2-3-2-3 2V6a2 2 0 0 1 2-2Z" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
+        <path d="M9 9h6M9 12h6M9 15h4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      </svg>
+    ),
+    performance: (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M5 18h14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+        <path d="M7 16V9M12 16V6M17 16v-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      </svg>
+    ),
+    survey: (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M7 5h10a2 2 0 0 1 2 2v11l-4-2-3 2-3-2-4 2V7a2 2 0 0 1 2-2Z" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
+        <path d="m9 10 1.5 1.5L15 7M9 14h6" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    )
+  };
+
+  return icons[kind] || null;
+};
+
 const modules = [
-  { title: "Attendance", icon: "AT" },
-  { title: "Time Table", icon: "TT" },
-  { title: "Assesments", icon: "AM" },
-  { title: "Admit Card", icon: "ID" },
-  { title: "Assignments", icon: "AS" },
-  { title: "Circular", icon: "CI" },
-  { title: "Courses", icon: "CO" },
-  { title: "Feedback", icon: "FB" },
-  { title: "Fees", icon: "FE" },
-  { title: "My Report Card", icon: "RC" },
-  { title: "Performances", icon: "PF" },
-  { title: "Survey", icon: "SV" }
+  { title: "Attendance", icon: "attendance" },
+  { title: "Time Table", icon: "timetable" },
+  { title: "Assesments", icon: "assessment" },
+  { title: "Admit Card", icon: "admitCard" },
+  { title: "Assignments", icon: "assignments" },
+  { title: "Circular", icon: "circular" },
+  { title: "Courses", icon: "courses" },
+  { title: "Feedback", icon: "feedback" },
+  { title: "Fees", icon: "fees" },
+  { title: "My Report Card", icon: "reportCard" },
+  { title: "Performances", icon: "performance" },
+  { title: "Survey", icon: "survey" }
 ];
 
 const StudentDashboard = ({ name }) => {
@@ -128,7 +208,9 @@ const StudentDashboard = ({ name }) => {
               aria-label={module.title}
               onClick={() => handleModuleClick(module.title)}
             >
-              <span className="portal-sidebtn-icon">{module.icon}</span>
+              <span className="portal-sidebtn-icon">
+                <ModuleIcon kind={module.icon} />
+              </span>
               <span className="portal-sidebtn-label">{module.title}</span>
             </button>
           ))}
@@ -220,7 +302,7 @@ const StudentDashboard = ({ name }) => {
               onClick={() => handleModuleClick(module.title)}
             >
               <span className="portal-module-icon" aria-hidden="true">
-                {module.icon}
+                <ModuleIcon kind={module.icon} />
               </span>
               <span className="portal-module-title">{module.title}</span>
             </button>

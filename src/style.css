@@ -801,7 +801,15 @@ button:hover {
   flex: 0 0 auto;
   width: 24px;
   text-align: center;
-  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.portal-sidebtn-icon svg {
+  width: 18px;
+  height: 18px;
+  display: block;
 }
 
 .portal-sidebtn-label {
@@ -977,6 +985,12 @@ button:hover {
   opacity: 1;
   pointer-events: auto;
   transform: translateY(0) scale(1);
+}
+
+.portal-module-icon svg {
+  width: 34px;
+  height: 34px;
+  display: block;
 }
 
 .portal-notify-header {

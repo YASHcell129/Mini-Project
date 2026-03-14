@@ -2,15 +2,69 @@ import React, { useEffect, useRef, useState } from "react";
 import LogoutConfirmModal from "../components/LogoutConfirmModal";
 import "../style.css";
 
+const ModuleIcon = ({ kind }) => {
+  const icons = {
+    attendance: (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M7 4v3M17 4v3M5 9h14M6 6h12a1 1 0 0 1 1 1v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7a1 1 0 0 1 1-1Z" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="m9 14 2 2 4-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+    assignments: (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M9 4h6M8 7h8M7 4h10a2 2 0 0 1 2 2v13l-4-2-3 2-3-2-4 2V6a2 2 0 0 1 2-2Z" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="m9 11 1.5 1.5L15 8" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+    classes: (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="4" y="5" width="16" height="11" rx="2" fill="none" stroke="currentColor" strokeWidth="1.8" />
+        <path d="M8 19h8M10 16v3M14 16v3" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      </svg>
+    ),
+    marksEntry: (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M7 4h10a2 2 0 0 1 2 2v14l-3-2-4 2-4-2-3 2V6a2 2 0 0 1 2-2Z" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
+        <path d="M9 10h6M9 14h4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      </svg>
+    ),
+    notices: (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 4 5 7v5c0 4.2 3 7.2 7 8 4-0.8 7-3.8 7-8V7l-7-3Z" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
+        <path d="M12 9v4M12 16h.01" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      </svg>
+    ),
+    leaveRequests: (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M7 4h10a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-4l-4 3v-3H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
+        <path d="m9 10 2 2 4-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+    reports: (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M6 19h12M8 16V9M12 16V5M16 16v-3" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+    timetable: (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" strokeWidth="1.8" />
+        <path d="M12 8v5l3 2" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    )
+  };
+
+  return icons[kind] || null;
+};
+
 const modules = [
-  { title: "Attendance", icon: "AT" },
-  { title: "Assignments", icon: "AS" },
-  { title: "Classes", icon: "CL" },
-  { title: "Marks Entry", icon: "ME" },
-  { title: "Notices", icon: "NT" },
-  { title: "Leave Requests", icon: "LR" },
-  { title: "Student Reports", icon: "SR" },
-  { title: "Time Table", icon: "TT" }
+  { title: "Attendance", icon: "attendance" },
+  { title: "Assignments", icon: "assignments" },
+  { title: "Classes", icon: "classes" },
+  { title: "Marks Entry", icon: "marksEntry" },
+  { title: "Notices", icon: "notices" },
+  { title: "Leave Requests", icon: "leaveRequests" },
+  { title: "Student Reports", icon: "reports" },
+  { title: "Time Table", icon: "timetable" }
 ];
 
 const overview = [
@@ -126,7 +180,9 @@ const FacultyDashboard = ({ name }) => {
               aria-label={module.title}
               onClick={() => handleModuleClick(module.title)}
             >
-              <span className="portal-sidebtn-icon">{module.icon}</span>
+              <span className="portal-sidebtn-icon">
+                <ModuleIcon kind={module.icon} />
+              </span>
               <span className="portal-sidebtn-label">{module.title}</span>
             </button>
           ))}
@@ -242,7 +298,7 @@ const FacultyDashboard = ({ name }) => {
               onClick={() => handleModuleClick(module.title)}
             >
               <span className="portal-module-icon" aria-hidden="true">
-                {module.icon}
+                <ModuleIcon kind={module.icon} />
               </span>
               <span className="portal-module-title">{module.title}</span>
             </button>
