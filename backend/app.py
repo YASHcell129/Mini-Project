@@ -16,14 +16,22 @@ announcements = db["announcements"]
 
 
 def serialize_user(user):
+    created_at = user.get("createdAt")
+    if isinstance(created_at, datetime):
+        created_at = created_at.isoformat()
+
     return {
+        "id": str(user.get("_id")) if user.get("_id") else "",
         "username": user.get("username"),
         "role": user.get("role"),
         "name": user.get("name", ""),
         "rollno": user.get("rollno", ""),
         "mobno": user.get("mobno", ""),
         "dob": user.get("dob", ""),
-        "image": user.get("image", "")
+        "department": user.get("department", ""),
+        "semester": user.get("semester", ""),
+        "image": user.get("image", ""),
+        "createdAt": created_at or ""
     }
 
 
@@ -187,6 +195,163 @@ def update_profile_image():
             "success": True,
             "message": "Profile image updated",
             "user": serialize_user(updated_user)
+        })
+    except PyMongoError as exc:
+        return jsonify({
+            "success": False,
+            "message": f"Database error: {exc}"
+        }), 500
+
+
+@app.route("/profile/password", methods=["PUT"])
+def update_profile_password():
+    data = request.json or {}
+    username = (data.get("username") or "").strip()
+    role = (data.get("role") or "").strip()
+    current_password = (data.get("currentPassword") or "").strip()
+    new_password = (data.get("newPassword") or "").strip()
+
+    if not username or not role or not current_password or not new_password:
+        return jsonify({
+            "success": False,
+            "message": "Username, role, current password and new password are required"
+        }), 400
+
+    if len(new_password) < 6:
+        return jsonify({
+            "success": False,
+            "message": "New password must be at least 6 characters"
+        }), 400
+
+    try:
+        user = users.find_one({
+            "username": username,
+            "role": role
+        })
+
+        if not user:
+            return jsonify({
+                "success": False,
+                "message": "User not found"
+            }), 404
+
+        if user.get("password") != current_password:
+            return jsonify({
+                "success": False,
+                "message": "Current password is incorrect"
+            }), 401
+
+        users.update_one(
+            {"_id": user["_id"]},
+            {"$set": {"password": new_password, "updatedAt": datetime.utcnow()}}
+        )
+
+        return jsonify({
+            "success": True,
+            "message": "Password updated successfully"
+        })
+    except PyMongoError as exc:
+        return jsonify({
+            "success": False,
+            "message": f"Database error: {exc}"
+        }), 500
+
+
+@app.route("/admin/users", methods=["GET"])
+def list_users():
+    role = (request.args.get("role") or "").strip()
+    query = {"role": role} if role else {}
+
+    try:
+        items = list(users.find(query).sort("createdAt", -1).limit(100))
+        return jsonify({
+            "success": True,
+            "users": [serialize_user(item) for item in items]
+        })
+    except PyMongoError as exc:
+        return jsonify({
+            "success": False,
+            "message": f"Database error: {exc}"
+        }), 500
+
+
+@app.route("/admin/users", methods=["POST"])
+def create_user():
+    data = request.json or {}
+    name = (data.get("name") or "").strip()
+    username = (data.get("username") or "").strip()
+    password = (data.get("password") or "").strip()
+    role = (data.get("role") or "").strip()
+    rollno = (data.get("rollno") or "").strip()
+    mobno = (data.get("mobno") or "").strip()
+    dob = (data.get("dob") or "").strip()
+    department = (data.get("department") or "").strip()
+    semester = (data.get("semester") or "").strip()
+
+    if not name or not username or not password or role not in {"Student", "Faculty", "Admin"}:
+        return jsonify({
+            "success": False,
+            "message": "Name, username, password and a valid role are required"
+        }), 400
+
+    try:
+        existing = users.find_one({"username": username})
+        if existing:
+            return jsonify({
+                "success": False,
+                "message": "Username already exists"
+            }), 409
+
+        document = {
+            "name": name,
+            "username": username,
+            "password": password,
+            "role": role,
+            "rollno": rollno,
+            "mobno": mobno,
+            "dob": dob,
+            "department": department,
+            "semester": semester,
+            "image": "",
+            "createdAt": datetime.utcnow()
+        }
+
+        result = users.insert_one(document)
+        document["_id"] = result.inserted_id
+
+        return jsonify({
+            "success": True,
+            "message": "User created successfully",
+            "user": serialize_user(document)
+        }), 201
+    except PyMongoError as exc:
+        return jsonify({
+            "success": False,
+            "message": f"Database error: {exc}"
+        }), 500
+
+
+@app.route("/admin/users/<user_id>", methods=["DELETE"])
+def delete_user(user_id):
+    object_id = parse_object_id(user_id)
+    if not object_id:
+        return jsonify({
+            "success": False,
+            "message": "Invalid user id"
+        }), 400
+
+    try:
+        existing = users.find_one({"_id": object_id})
+        if not existing:
+            return jsonify({
+                "success": False,
+                "message": "User not found"
+            }), 404
+
+        users.delete_one({"_id": object_id})
+        return jsonify({
+            "success": True,
+            "message": "User deleted successfully"
         })
     except PyMongoError as exc:
         return jsonify({

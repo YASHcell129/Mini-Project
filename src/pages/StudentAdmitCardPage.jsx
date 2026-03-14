@@ -1,11 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import LogoutConfirmModal from "../components/LogoutConfirmModal";
+import ResetPasswordModal from "../components/ResetPasswordModal";
 import "../style.css";
 
 const StudentAdmitCardPage = () => {
   const [displayName, setDisplayName] = useState("Student");
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [logoutConfirmOpen, setLogoutConfirmOpen] = useState(false);
+  const [resetPasswordOpen, setResetPasswordOpen] = useState(false);
   const [session, setSession] = useState("2025-26");
   const [semester, setSemester] = useState("Semester 4");
   const [examType, setExamType] = useState("Mid-Sem");
@@ -24,17 +26,18 @@ const StudentAdmitCardPage = () => {
   }, []);
 
   useEffect(() => {
-    if (!logoutConfirmOpen) return undefined;
+    if (!logoutConfirmOpen && !resetPasswordOpen) return undefined;
 
     const handleEscape = (e) => {
       if (e.key === "Escape") {
         setLogoutConfirmOpen(false);
+        setResetPasswordOpen(false);
       }
     };
 
     document.addEventListener("keydown", handleEscape);
     return () => document.removeEventListener("keydown", handleEscape);
-  }, [logoutConfirmOpen]);
+  }, [logoutConfirmOpen, resetPasswordOpen]);
 
   useEffect(() => {
     try {
@@ -53,6 +56,8 @@ const StudentAdmitCardPage = () => {
 
     if (action === "logout") {
       setLogoutConfirmOpen(true);
+    } else if (action === "Reset Password") {
+      setResetPasswordOpen(true);
     } else if (action === "Profile") {
       window.location.href = "/profile";
     } else {
@@ -106,6 +111,9 @@ const StudentAdmitCardPage = () => {
               </button>
               <button type="button" className="menu-item" onClick={() => handleMenuAction("Settings")}>
                 Settings
+              </button>
+              <button type="button" className="menu-item" onClick={() => handleMenuAction("Reset Password")}>
+                Reset Password
               </button>
               <button type="button" className="menu-item" onClick={() => handleMenuAction("Help")}>
                 Help
@@ -202,6 +210,7 @@ const StudentAdmitCardPage = () => {
           window.location.href = "/";
         }}
       />
+      <ResetPasswordModal open={resetPasswordOpen} onClose={() => setResetPasswordOpen(false)} />
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import LogoutConfirmModal from "../components/LogoutConfirmModal";
+import ResetPasswordModal from "../components/ResetPasswordModal";
 import "../style.css";
 
 const StudentCircularsPage = () => {
@@ -9,6 +10,7 @@ const StudentCircularsPage = () => {
   const [loading, setLoading] = useState(true);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [logoutConfirmOpen, setLogoutConfirmOpen] = useState(false);
+  const [resetPasswordOpen, setResetPasswordOpen] = useState(false);
   const menuRef = useRef(null);
 
   useEffect(() => {
@@ -23,17 +25,18 @@ const StudentCircularsPage = () => {
   }, []);
 
   useEffect(() => {
-    if (!logoutConfirmOpen) return undefined;
+    if (!logoutConfirmOpen && !resetPasswordOpen) return undefined;
 
     const handleEscape = (e) => {
       if (e.key === "Escape") {
         setLogoutConfirmOpen(false);
+        setResetPasswordOpen(false);
       }
     };
 
     document.addEventListener("keydown", handleEscape);
     return () => document.removeEventListener("keydown", handleEscape);
-  }, [logoutConfirmOpen]);
+  }, [logoutConfirmOpen, resetPasswordOpen]);
 
   useEffect(() => {
     try {
@@ -79,6 +82,8 @@ const StudentCircularsPage = () => {
 
     if (action === "logout") {
       setLogoutConfirmOpen(true);
+    } else if (action === "Reset Password") {
+      setResetPasswordOpen(true);
     } else if (action === "Profile") {
       window.location.href = "/profile";
     } else {
@@ -127,6 +132,9 @@ const StudentCircularsPage = () => {
               </button>
               <button type="button" className="menu-item" onClick={() => handleMenuAction("Settings")}>
                 Settings
+              </button>
+              <button type="button" className="menu-item" onClick={() => handleMenuAction("Reset Password")}>
+                Reset Password
               </button>
               <button type="button" className="menu-item" onClick={() => handleMenuAction("Help")}>
                 Help
@@ -178,6 +186,7 @@ const StudentCircularsPage = () => {
           window.location.href = "/";
         }}
       />
+      <ResetPasswordModal open={resetPasswordOpen} onClose={() => setResetPasswordOpen(false)} />
     </div>
   );
 };

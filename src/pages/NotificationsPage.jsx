@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import LogoutConfirmModal from "../components/LogoutConfirmModal";
+import ResetPasswordModal from "../components/ResetPasswordModal";
 import "../style.css";
 
 const roleConfig = {
@@ -28,6 +29,7 @@ const NotificationsPage = ({ role }) => {
   const [loading, setLoading] = useState(true);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [logoutConfirmOpen, setLogoutConfirmOpen] = useState(false);
+  const [resetPasswordOpen, setResetPasswordOpen] = useState(false);
   const menuRef = useRef(null);
 
   useEffect(() => {
@@ -82,23 +84,26 @@ const NotificationsPage = ({ role }) => {
   }, [role]);
 
   useEffect(() => {
-    if (!logoutConfirmOpen) return undefined;
+    if (!logoutConfirmOpen && !resetPasswordOpen) return undefined;
 
     const handleEscape = (e) => {
       if (e.key === "Escape") {
         setLogoutConfirmOpen(false);
+        setResetPasswordOpen(false);
       }
     };
 
     document.addEventListener("keydown", handleEscape);
     return () => document.removeEventListener("keydown", handleEscape);
-  }, [logoutConfirmOpen]);
+  }, [logoutConfirmOpen, resetPasswordOpen]);
 
   const handleMenuAction = (action) => {
     setUserMenuOpen(false);
 
     if (action === "logout") {
       setLogoutConfirmOpen(true);
+    } else if (action === "Reset Password") {
+      setResetPasswordOpen(true);
     } else if (action === "Profile") {
       window.location.href = "/profile";
     } else {
@@ -147,6 +152,9 @@ const NotificationsPage = ({ role }) => {
               </button>
               <button type="button" className="menu-item" onClick={() => handleMenuAction("Settings")}>
                 Settings
+              </button>
+              <button type="button" className="menu-item" onClick={() => handleMenuAction("Reset Password")}>
+                Reset Password
               </button>
               <button type="button" className="menu-item" onClick={() => handleMenuAction("Help")}>
                 Help
@@ -204,6 +212,7 @@ const NotificationsPage = ({ role }) => {
           window.location.href = "/";
         }}
       />
+      <ResetPasswordModal open={resetPasswordOpen} onClose={() => setResetPasswordOpen(false)} />
     </div>
   );
 };

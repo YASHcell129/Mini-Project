@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import LogoutConfirmModal from "../components/LogoutConfirmModal";
+import ResetPasswordModal from "../components/ResetPasswordModal";
 import "../style.css";
 
 const ModuleIcon = ({ kind }) => {
@@ -98,6 +99,7 @@ const AdminDashboard = ({ name }) => {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [announcementOpen, setAnnouncementOpen] = useState(false);
   const [logoutConfirmOpen, setLogoutConfirmOpen] = useState(false);
+  const [resetPasswordOpen, setResetPasswordOpen] = useState(false);
   const [announcementForm, setAnnouncementForm] = useState(initialForm);
   const [announcementSending, setAnnouncementSending] = useState(false);
   const [managedItems, setManagedItems] = useState([]);
@@ -188,19 +190,20 @@ const AdminDashboard = ({ name }) => {
   }, []);
 
   useEffect(() => {
-    if (!helpOpen && !announcementOpen && !logoutConfirmOpen) return undefined;
+    if (!helpOpen && !announcementOpen && !logoutConfirmOpen && !resetPasswordOpen) return undefined;
 
     const handleEscape = (e) => {
       if (e.key === "Escape") {
         setHelpOpen(false);
         setAnnouncementOpen(false);
         setLogoutConfirmOpen(false);
+        setResetPasswordOpen(false);
       }
     };
 
     document.addEventListener("keydown", handleEscape);
     return () => document.removeEventListener("keydown", handleEscape);
-  }, [helpOpen, announcementOpen, logoutConfirmOpen]);
+  }, [helpOpen, announcementOpen, logoutConfirmOpen, resetPasswordOpen]);
 
   const fireToast = (message) => {
     setToastMessage(message);
@@ -233,6 +236,11 @@ const AdminDashboard = ({ name }) => {
 
   const handleModuleClick = (section) => {
     setUserMenuOpen(false);
+
+    if (section === "User Management") {
+      window.location.href = "/admin/users";
+      return;
+    }
 
     if (section === "Announcements") {
       openAnnouncementManager();
@@ -341,6 +349,8 @@ const AdminDashboard = ({ name }) => {
 
     if (action === "logout") {
       setLogoutConfirmOpen(true);
+    } else if (action === "Reset Password") {
+      setResetPasswordOpen(true);
     } else if (action === "Profile") {
       window.location.href = "/profile";
     } else if (action === "Help") {
@@ -427,6 +437,9 @@ const AdminDashboard = ({ name }) => {
               </button>
               <button type="button" className="menu-item" onClick={() => handleMenuAction("Settings")}>
                 Settings
+              </button>
+              <button type="button" className="menu-item" onClick={() => handleMenuAction("Reset Password")}>
+                Reset Password
               </button>
               <button type="button" className="menu-item" onClick={() => handleMenuAction("Help")}>
                 Help
@@ -702,6 +715,7 @@ const AdminDashboard = ({ name }) => {
           window.location.href = "/";
         }}
       />
+      <ResetPasswordModal open={resetPasswordOpen} onClose={() => setResetPasswordOpen(false)} />
     </div>
   );
 };

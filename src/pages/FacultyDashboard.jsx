@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import LogoutConfirmModal from "../components/LogoutConfirmModal";
+import ResetPasswordModal from "../components/ResetPasswordModal";
 import "../style.css";
 
 const ModuleIcon = ({ kind }) => {
@@ -86,6 +87,7 @@ const FacultyDashboard = ({ name }) => {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [helpOpen, setHelpOpen] = useState(false);
   const [logoutConfirmOpen, setLogoutConfirmOpen] = useState(false);
+  const [resetPasswordOpen, setResetPasswordOpen] = useState(false);
   const [concern, setConcern] = useState("");
   const [showConcernRaised, setShowConcernRaised] = useState(false);
   const [displayName, setDisplayName] = useState(name || "Faculty");
@@ -121,18 +123,19 @@ const FacultyDashboard = ({ name }) => {
   }, [name]);
 
   useEffect(() => {
-    if (!helpOpen && !logoutConfirmOpen) return undefined;
+    if (!helpOpen && !logoutConfirmOpen && !resetPasswordOpen) return undefined;
 
     const handleEscape = (e) => {
       if (e.key === "Escape") {
         setHelpOpen(false);
         setLogoutConfirmOpen(false);
+        setResetPasswordOpen(false);
       }
     };
 
     document.addEventListener("keydown", handleEscape);
     return () => document.removeEventListener("keydown", handleEscape);
-  }, [helpOpen, logoutConfirmOpen]);
+  }, [helpOpen, logoutConfirmOpen, resetPasswordOpen]);
 
   const handleModuleClick = (section) => {
     alert(`${section} section coming soon`);
@@ -157,6 +160,8 @@ const FacultyDashboard = ({ name }) => {
 
     if (action === "logout") {
       setLogoutConfirmOpen(true);
+    } else if (action === "Reset Password") {
+      setResetPasswordOpen(true);
     } else if (action === "Help") {
       setHelpOpen(true);
     } else {
@@ -243,6 +248,9 @@ const FacultyDashboard = ({ name }) => {
               </button>
               <button type="button" className="menu-item" onClick={() => handleMenuAction("Settings")}>
                 Settings
+              </button>
+              <button type="button" className="menu-item" onClick={() => handleMenuAction("Reset Password")}>
+                Reset Password
               </button>
               <button type="button" className="menu-item" onClick={() => handleMenuAction("Help")}>
                 Help
@@ -359,6 +367,7 @@ const FacultyDashboard = ({ name }) => {
           window.location.href = "/";
         }}
       />
+      <ResetPasswordModal open={resetPasswordOpen} onClose={() => setResetPasswordOpen(false)} />
     </div>
   );
 };

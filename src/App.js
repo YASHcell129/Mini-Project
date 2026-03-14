@@ -5,6 +5,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import NotificationsPage from "./pages/NotificationsPage";
 import StudentCircularsPage from "./pages/StudentCircularsPage";
 import StudentAdmitCardPage from "./pages/StudentAdmitCardPage";
+import AdminUserManagementPage from "./pages/AdminUserManagementPage";
 import UserProfile from "./pages/UserProfile";
 import "./style.css";
 
@@ -13,6 +14,7 @@ function App() {
   const isStudentPage = path === "/student";
   const isFacultyPage = path === "/faculty";
   const isAdminPage = path === "/admin";
+  const isAdminUserManagementPage = path === "/admin/users";
   const isStudentCircularsPage = path === "/student/circulars";
   const isStudentAdmitCardPage = path === "/student/admit-card";
   const isStudentNotificationsPage = path === "/student/notifications";
@@ -21,9 +23,11 @@ function App() {
   const isProfilePage = path === "/profile";
 
   return (
-    <div className={`app-background ${isStudentPage || isFacultyPage || isAdminPage || isStudentCircularsPage || isStudentAdmitCardPage || isStudentNotificationsPage || isFacultyNotificationsPage || isAdminNotificationsPage || isProfilePage ? "blur-bg" : ""}`}>
+    <div className={`app-background ${isStudentPage || isFacultyPage || isAdminPage || isAdminUserManagementPage || isStudentCircularsPage || isStudentAdmitCardPage || isStudentNotificationsPage || isFacultyNotificationsPage || isAdminNotificationsPage || isProfilePage ? "blur-bg" : ""}`}>
       {isProfilePage ? (
         <UserProfile />
+      ) : isAdminUserManagementPage ? (
+        <AdminUserManagementPage />
       ) : isStudentAdmitCardPage ? (
         <StudentAdmitCardPage />
       ) : isStudentCircularsPage ? (
