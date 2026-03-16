@@ -30,6 +30,9 @@ def serialize_user(user):
         "dob": user.get("dob", ""),
         "department": user.get("department", ""),
         "semester": user.get("semester", ""),
+        "course1": user.get("course1", ""),
+        "course2": user.get("course2", ""),
+        "course3": user.get("course3", ""),
         "image": user.get("image", ""),
         "createdAt": created_at or ""
     }
@@ -287,12 +290,40 @@ def create_user():
     dob = (data.get("dob") or "").strip()
     department = (data.get("department") or "").strip()
     semester = (data.get("semester") or "").strip()
+    course1 = (data.get("course1") or "").strip()
+    course2 = (data.get("course2") or "").strip()
+    course3 = (data.get("course3") or "").strip()
 
-    if not name or not username or not password or role not in {"Student", "Faculty", "Admin"}:
+    if role not in {"Student", "Faculty", "Admin"}:
         return jsonify({
             "success": False,
-            "message": "Name, username, password and a valid role are required"
+            "message": "A valid role is required"
         }), 400
+
+    required_fields = [name, username, password, rollno, mobno, dob]
+    if not all(required_fields):
+        return jsonify({
+            "success": False,
+            "message": "Name, username, password, roll number, mobile number and date of birth are required"
+        }), 400
+
+    if role == "Student" and not semester:
+        return jsonify({
+            "success": False,
+            "message": "Semester is required for students"
+        }), 400
+
+    if role == "Faculty":
+        if not department:
+            return jsonify({
+                "success": False,
+                "message": "Department is required for faculty"
+            }), 400
+        if not course1:
+            return jsonify({
+                "success": False,
+                "message": "Course 1 is required for faculty"
+            }), 400
 
     try:
         existing = users.find_one({"username": username})
@@ -311,7 +342,10 @@ def create_user():
             "mobno": mobno,
             "dob": dob,
             "department": department,
-            "semester": semester,
+            "semester": semester if role == "Student" else "",
+            "course1": course1 if role == "Faculty" else "",
+            "course2": course2 if role == "Faculty" else "",
+            "course3": course3 if role == "Faculty" else "",
             "image": "",
             "createdAt": datetime.utcnow()
         }

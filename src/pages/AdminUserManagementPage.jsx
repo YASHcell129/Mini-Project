@@ -13,7 +13,10 @@ const initialForm = {
   mobno: "",
   dob: "",
   department: "",
-  semester: ""
+  semester: "",
+  course1: "",
+  course2: "",
+  course3: ""
 };
 
 const generatePassword = () => {
@@ -228,17 +231,17 @@ const AdminUserManagementPage = () => {
             <form className="user-management-form" onSubmit={handleSubmit}>
               <div className="user-form-grid">
                 <div>
-                  <label className="help-label" htmlFor="user-name">Name</label>
+                  <label className="help-label" htmlFor="user-name">Name <span className="required-mark">*</span></label>
                   <input className="user-management-input" id="user-name" type="text" value={formData.name} onChange={(e) => handleChange("name", e.target.value)} required />
                 </div>
 
                 <div>
-                  <label className="help-label" htmlFor="user-username">Username</label>
+                  <label className="help-label" htmlFor="user-username">Username <span className="required-mark">*</span></label>
                   <input className="user-management-input" id="user-username" type="text" value={formData.username} onChange={(e) => handleChange("username", e.target.value)} required />
                 </div>
 
                 <div>
-                  <label className="help-label" htmlFor="user-password">Password</label>
+                  <label className="help-label" htmlFor="user-password">Password <span className="required-mark">*</span></label>
                   <div className="user-password-row">
                     <input className="user-management-input" id="user-password" type="text" value={formData.password} onChange={(e) => handleChange("password", e.target.value)} required />
                     <button
@@ -252,8 +255,24 @@ const AdminUserManagementPage = () => {
                 </div>
 
                 <div>
-                  <label className="help-label" htmlFor="user-role">Role</label>
-                  <select id="user-role" className="announcement-select user-management-input" value={formData.role} onChange={(e) => handleChange("role", e.target.value)}>
+                  <label className="help-label" htmlFor="user-role">Role <span className="required-mark">*</span></label>
+                  <select
+                    id="user-role"
+                    className="announcement-select user-management-input"
+                    value={formData.role}
+                    onChange={(e) => {
+                      const nextRole = e.target.value;
+                      setFormData((prev) => ({
+                        ...prev,
+                        role: nextRole,
+                        department: nextRole === "Faculty" ? prev.department : "",
+                        semester: nextRole === "Student" ? prev.semester : "",
+                        course1: nextRole === "Faculty" ? prev.course1 : "",
+                        course2: nextRole === "Faculty" ? prev.course2 : "",
+                        course3: nextRole === "Faculty" ? prev.course3 : ""
+                      }));
+                    }}
+                  >
                     <option value="Student">Student</option>
                     <option value="Faculty">Faculty</option>
                     <option value="Admin">Admin</option>
@@ -261,31 +280,54 @@ const AdminUserManagementPage = () => {
                 </div>
 
                 <div>
-                  <label className="help-label" htmlFor="user-rollno">Roll No</label>
-                  <input className="user-management-input" id="user-rollno" type="text" value={formData.rollno} onChange={(e) => handleChange("rollno", e.target.value)} />
+                  <label className="help-label" htmlFor="user-rollno">Roll No <span className="required-mark">*</span></label>
+                  <input className="user-management-input" id="user-rollno" type="text" value={formData.rollno} onChange={(e) => handleChange("rollno", e.target.value)} required />
                 </div>
 
                 <div>
-                  <label className="help-label" htmlFor="user-mobile">Mobile No</label>
-                  <input className="user-management-input" id="user-mobile" type="text" value={formData.mobno} onChange={(e) => handleChange("mobno", e.target.value)} />
+                  <label className="help-label" htmlFor="user-mobile">Mobile No <span className="required-mark">*</span></label>
+                  <input className="user-management-input" id="user-mobile" type="text" value={formData.mobno} onChange={(e) => handleChange("mobno", e.target.value)} required />
                 </div>
 
                 <div>
-                  <label className="help-label" htmlFor="user-dob">Date of Birth</label>
-                  <input className="user-management-input" id="user-dob" type="date" value={formData.dob} onChange={(e) => handleChange("dob", e.target.value)} />
+                  <label className="help-label" htmlFor="user-dob">Date of Birth <span className="required-mark">*</span></label>
+                  <input className="user-management-input" id="user-dob" type="date" value={formData.dob} onChange={(e) => handleChange("dob", e.target.value)} required />
                 </div>
 
                 {formData.role === "Faculty" ? (
                   <div>
-                    <label className="help-label" htmlFor="user-department">Department</label>
-                    <input className="user-management-input" id="user-department" type="text" value={formData.department} onChange={(e) => handleChange("department", e.target.value)} />
+                    <label className="help-label" htmlFor="user-department">Department <span className="required-mark">*</span></label>
+                    <input className="user-management-input" id="user-department" type="text" value={formData.department} onChange={(e) => handleChange("department", e.target.value)} required />
                   </div>
                 ) : null}
 
-                <div>
-                  <label className="help-label" htmlFor="user-semester">Semester</label>
-                  <input className="user-management-input" id="user-semester" type="text" value={formData.semester} onChange={(e) => handleChange("semester", e.target.value)} />
-                </div>
+                {formData.role === "Faculty" ? (
+                  <div>
+                    <label className="help-label" htmlFor="user-course1">Course 1 <span className="required-mark">*</span></label>
+                    <input className="user-management-input" id="user-course1" type="text" value={formData.course1} onChange={(e) => handleChange("course1", e.target.value)} required />
+                  </div>
+                ) : null}
+
+                {formData.role === "Faculty" ? (
+                  <div>
+                    <label className="help-label" htmlFor="user-course2">Course 2</label>
+                    <input className="user-management-input" id="user-course2" type="text" value={formData.course2} onChange={(e) => handleChange("course2", e.target.value)} />
+                  </div>
+                ) : null}
+
+                {formData.role === "Faculty" ? (
+                  <div>
+                    <label className="help-label" htmlFor="user-course3">Course 3</label>
+                    <input className="user-management-input" id="user-course3" type="text" value={formData.course3} onChange={(e) => handleChange("course3", e.target.value)} />
+                  </div>
+                ) : null}
+
+                {formData.role === "Student" ? (
+                  <div>
+                    <label className="help-label" htmlFor="user-semester">Semester <span className="required-mark">*</span></label>
+                    <input className="user-management-input" id="user-semester" type="text" value={formData.semester} onChange={(e) => handleChange("semester", e.target.value)} required />
+                  </div>
+                ) : null}
               </div>
 
               <div className="help-actions">
@@ -321,6 +363,9 @@ const AdminUserManagementPage = () => {
                     <span>DOB: {item.dob || "N/A"}</span>
                     <span>Department: {item.department || "N/A"}</span>
                     <span>Semester: {item.semester || "N/A"}</span>
+                    <span>Course 1: {item.course1 || "N/A"}</span>
+                    <span>Course 2: {item.course2 || "N/A"}</span>
+                    <span>Course 3: {item.course3 || "N/A"}</span>
                   </div>
                   <div className="user-list-actions">
                     <button

@@ -613,6 +613,11 @@ button:hover {
   font-size: 14px;
 }
 
+.required-mark {
+  color: #dc2626;
+  font-weight: 800;
+}
+
 .help-textarea {
   width: 100%;
   min-height: 130px;
