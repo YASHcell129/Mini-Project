@@ -16,7 +16,7 @@ const initialForm = {
   semester: "",
   course1: "",
   course2: "",
-  facultyid: ""
+  course3: ""
 };
 
 const generatePassword = () => {
@@ -270,7 +270,7 @@ const AdminUserManagementPage = () => {
                         semester: nextRole === "Student" ? prev.semester : "",
                         course1: nextRole === "Faculty" ? prev.course1 : "",
                         course2: nextRole === "Faculty" ? prev.course2 : "",
-                        facultyid: nextRole === "Faculty" ? prev.facultyid : ""
+                        course3: nextRole === "Faculty" ? prev.course3 : ""
                       }));
                     }}
                   >
@@ -320,8 +320,8 @@ const AdminUserManagementPage = () => {
 
                 {formData.role === "Faculty" ? (
                   <div>
-                    <label className="help-label" htmlFor="user-facultyid">Faculty ID <span className="required-mark">*</span></label>
-                    <input className="user-management-input" id="user-facultyid" type="text" value={formData.facultyid} onChange={(e) => handleChange("facultyid", e.target.value)} required />
+                    <label className="help-label" htmlFor="user-course3">Course 3</label>
+                    <input className="user-management-input" id="user-course3" type="text" value={formData.course3} onChange={(e) => handleChange("course3", e.target.value)} />
                   </div>
                 ) : null}
 
@@ -364,23 +364,11 @@ const AdminUserManagementPage = () => {
                     <span>Roll No: {item.rollno || "N/A"}</span>
                     <span>Mobile: {item.mobno || "N/A"}</span>
                     <span>DOB: {item.dob || "N/A"}</span>
-                    {item.role === "Student" && (
-                      <>
-                        <span>Semester: {item.semester || "N/A"}</span>
-                      </>
-                    )}
-                    {item.role === "Faculty" && (
-                      <>
-                        <span>Faculty ID: {item.facultyid || "N/A"}</span>
-                        <span>Department: {item.department || "N/A"}</span>
-                        <span>Course 1: {item.course1 || "N/A"}</span>
-                        <span>Course 2: {item.course2 || "N/A"}</span>
-                        <span>Faculty ID: {item.facultyid || "N/A"}</span>
-                      </>
-                    )}
-                    {item.role === "Admin" && (
-                      <span>Admin ID: {item.adminid || "N/A"}</span>
-                    )}
+                    <span>Department: {item.department || "N/A"}</span>
+                    <span>Semester: {item.semester || "N/A"}</span>
+                    <span>Course 1: {item.course1 || "N/A"}</span>
+                    <span>Course 2: {item.course2 || "N/A"}</span>
+                    <span>Course 3: {item.course3 || "N/A"}</span>
                   </div>
                   <div className="user-list-actions">
                     <button

@@ -259,71 +259,30 @@ const UserProfile = () => {
             </div>
 
             <div className="profile-page-details">
-              {/* Common fields for all roles */}
+              <div className="profile-detail-card">
+                <label>Roll Number</label>
+                <p>{userData?.rollno || "N/A"}</p>
+              </div>
+
               <div className="profile-detail-card">
                 <label>Mobile Number</label>
                 <p>{userData?.mobno || "N/A"}</p>
               </div>
+
               <div className="profile-detail-card">
                 <label>Date of Birth</label>
                 <p>{userData?.dob || "N/A"}</p>
               </div>
+
               <div className="profile-detail-card">
                 <label>Username</label>
                 <p>{userData?.username || "N/A"}</p>
               </div>
+
               <div className="profile-detail-card">
                 <label>Role</label>
                 <p>{userData?.role || "N/A"}</p>
               </div>
-
-              {/* Student fields */}
-              {userData?.role === "Student" && (
-                <>
-                  <div className="profile-detail-card">
-                    <label>Roll Number</label>
-                    <p>{userData?.rollno || "N/A"}</p>
-                  </div>
-                  <div className="profile-detail-card">
-                    <label>Semester</label>
-                    <p>{userData?.semester || "N/A"}</p>
-                  </div>
-                </>
-              )}
-
-              {/* Faculty fields */}
-              {userData?.role === "Faculty" && (
-                <>
-                  <div className="profile-detail-card">
-                    <label>Faculty ID</label>
-                    <p>{userData?.facultyid || "N/A"}</p>
-                  </div>
-                  <div className="profile-detail-card">
-                    <label>Department</label>
-                    <p>{userData?.department || "N/A"}</p>
-                  </div>
-                  <div className="profile-detail-card">
-                    <label>Course 1</label>
-                    <p>{userData?.course1 || "N/A"}</p>
-                  </div>
-                  <div className="profile-detail-card">
-                    <label>Course 2</label>
-                    <p>{userData?.course2 || "N/A"}</p>
-                  </div>
-                  <div className="profile-detail-card">
-                    <label>Course 3</label>
-                    <p>{userData?.course3 || "N/A"}</p>
-                  </div>
-                </>
-              )}
-
-              {/* Admin fields */}
-              {userData?.role === "Admin" && (
-                <div className="profile-detail-card">
-                  <label>Admin ID</label>
-                  <p>{userData?.adminid || "N/A"}</p>
-                </div>
-              )}
             </div>
           </div>
         </section>
