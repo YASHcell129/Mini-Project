@@ -16,24 +16,26 @@ announcements = db["announcements"]
 
 
 def serialize_user(user):
-    created_at = user.get("createdAt")
+    created_at = user.get("CreatedAt")
     if isinstance(created_at, datetime):
         created_at = created_at.isoformat()
 
     return {
         "id": str(user.get("_id")) if user.get("_id") else "",
-        "username": user.get("username"),
-        "role": user.get("role"),
-        "name": user.get("name", ""),
-        "rollno": user.get("rollno", ""),
-        "mobno": user.get("mobno", ""),
-        "dob": user.get("dob", ""),
-        "department": user.get("department", ""),
-        "semester": user.get("semester", ""),
-        "course1": user.get("course1", ""),
-        "course2": user.get("course2", ""),
-        "course3": user.get("course3", ""),
-        "image": user.get("image", ""),
+        "username": user.get("Username", ""),
+        "role": user.get("Role", ""),
+        "name": user.get("Name", ""),
+        "rollno": user.get("RollNo", ""),
+        "mobno": user.get("MobileNo", ""),
+        "dob": user.get("DOB", ""),
+        "department": user.get("Department", ""),
+        "semester": user.get("Semester", ""),
+        "course1": user.get("Course1", ""),
+        "course2": user.get("Course2", ""),
+        "course3": user.get("Course3", ""),
+        "gpa": user.get("GPA", ""),
+        "graduationYear": user.get("GraduationYear", ""),
+        "image": user.get("Image", ""),
         "createdAt": created_at or ""
     }
 
@@ -65,16 +67,22 @@ def parse_object_id(value):
 @app.route("/login", methods=["POST"])
 def login():
     data = request.json
-    username = data.get("username")
-    password = data.get("password")
-    role = data.get("role")
+    username = str(data.get("username", "")).strip()
+    password = data.get("password", "")
+    role = str(data.get("role", "")).strip()
     print(username, password, role)
 
-    user = users.find_one({
-        "username": username,
-        "password": password,
-        "role": role
-    })
+    # Try both string and int for password
+    query = {
+        "Username": username,
+        "Role": role,
+        "$or": [
+            {"Password": password},
+            {"Password": int(password)} if str(password).isdigit() else {}
+        ]
+    }
+
+    user = users.find_one(query)
 
     if user:
         return jsonify({
