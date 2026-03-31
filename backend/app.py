@@ -300,17 +300,23 @@ def create_user():
             "message": "A valid role is required"
         }), 400
 
-    required_fields = [name, username, password, rollno, mobno, dob]
+    required_fields = [name, username, password, mobno, dob]
     if not all(required_fields):
         return jsonify({
             "success": False,
-            "message": "Name, username, password, roll number, mobile number and date of birth are required"
+            "message": "Name, username, password, mobile number and date of birth are required"
         }), 400
 
     if role == "Student" and not semester:
         return jsonify({
             "success": False,
             "message": "Semester is required for students"
+        }), 400
+
+    if role in {"Student", "Admin"} and not rollno:
+        return jsonify({
+            "success": False,
+            "message": "Roll number is required for students and admins"
         }), 400
 
     if role == "Faculty":
@@ -338,7 +344,7 @@ def create_user():
             "username": username,
             "password": password,
             "role": role,
-            "rollno": rollno,
+            "rollno": "" if role == "Faculty" else rollno,
             "mobno": mobno,
             "dob": dob,
             "department": department,
