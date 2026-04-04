@@ -20,10 +20,8 @@ const LoginForm = ({ role, goBack }) => {
       if (res.data.success) {
         try {
           if (res.data.user) {
+            // Store all user details for later use
             localStorage.setItem("user", JSON.stringify(res.data.user));
-            if (res.data.user.name) {
-              localStorage.setItem("userName", res.data.user.name);
-            }
           }
         } catch (err) {
           // ignore storage errors

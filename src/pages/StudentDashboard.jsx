@@ -154,15 +154,12 @@ const StudentDashboard = ({ name }) => {
   }, [helpOpen, logoutConfirmOpen, resetPasswordOpen]);
 
   const handleModuleClick = (section) => {
-    if (section === "Admit Card") {
-      window.location.href = "/student/admit-card";
-      return;
-    }
-
     if (section === "Circular") {
       window.location.href = "/student/circulars";
       return;
     }
+
+    // ...existing code...
 
     alert(`${section} section coming soon`);
     setUserMenuOpen(false);

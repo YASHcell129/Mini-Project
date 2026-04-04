@@ -12,6 +12,18 @@ CORS(app)
 client = MongoClient("mongodb://localhost:27017/")
 db = client["acad_hub"]
 users = db["users"]
+
+# API to fetch user profile by username and role
+@app.route("/user/profile", methods=["GET"])
+def get_user_profile():
+    username = request.args.get("username")
+    role = request.args.get("role")
+    if not username or not role:
+        return jsonify({"success": False, "message": "Username and role are required"}), 400
+    user = users.find_one({"Username": username, "Role": role})
+    if not user:
+        return jsonify({"success": False, "message": "User not found"}), 404
+    return jsonify({"success": True, "user": serialize_user(user)})
 announcements = db["announcements"]
 
 
@@ -36,6 +48,7 @@ def serialize_user(user):
         "gpa": user.get("GPA", ""),
         "graduationYear": user.get("GraduationYear", ""),
         "image": user.get("Image", ""),
+        "StudentID": user.get("StudentID", ""),
         "createdAt": created_at or ""
     }
 
