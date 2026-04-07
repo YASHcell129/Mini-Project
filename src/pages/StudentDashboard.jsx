@@ -47,12 +47,6 @@ const ModuleIcon = ({ kind }) => {
         <path d="M7 9.5V15c0 1.1 2.2 2 5 2s5-.9 5-2V9.5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     ),
-    feedback: (
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M6 6h12a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-7l-4 3v-3H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Z" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
-        <path d="M8.5 10.5h7M8.5 13.5h5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-      </svg>
-    ),
     fees: (
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <rect x="4" y="6" width="16" height="12" rx="2" fill="none" stroke="currentColor" strokeWidth="1.8" />
@@ -72,12 +66,6 @@ const ModuleIcon = ({ kind }) => {
         <path d="M7 16V9M12 16V6M17 16v-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
       </svg>
     ),
-    survey: (
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M7 5h10a2 2 0 0 1 2 2v11l-4-2-3 2-3-2-4 2V7a2 2 0 0 1 2-2Z" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
-        <path d="m9 10 1.5 1.5L15 7M9 14h6" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    )
   };
 
   return icons[kind] || null;
@@ -91,11 +79,9 @@ const modules = [
   { title: "Assignments", icon: "assignments" },
   { title: "Circular", icon: "circular" },
   { title: "Courses", icon: "courses" },
-  { title: "Feedback", icon: "feedback" },
   { title: "Fees", icon: "fees" },
   { title: "My Report Card", icon: "reportCard" },
-  { title: "Performances", icon: "performance" },
-  { title: "Survey", icon: "survey" }
+  { title: "Performances", icon: "performance" }
 ];
 
 const StudentDashboard = ({ name }) => {
@@ -159,7 +145,25 @@ const StudentDashboard = ({ name }) => {
       return;
     }
 
-    // ...existing code...
+    if (section === "Admit Card") {
+      window.location.href = "/student/admit-card";
+      return;
+    }
+
+    if (section === "My Report Card") {
+      window.location.href = "/student/report-card";
+      return;
+    }
+
+    if (section === "Fees") {
+      window.location.href = "/student/fees";
+      return;
+    }
+
+    if (section === "Courses") {
+      window.location.href = "/student/courses";
+      return;
+    }
 
     alert(`${section} section coming soon`);
     setUserMenuOpen(false);
